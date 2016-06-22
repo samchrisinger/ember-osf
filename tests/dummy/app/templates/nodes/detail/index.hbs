@@ -1,5 +1,5 @@
 {{link-to 'Back to list' 'nodes' class="btn btn-default"}}
-<div class="col-md-12">
+<div class="panel">
     <h2>Data</h2>
     <p><label>Title:</label> {{model.title}}</p>
     <p><label>Description: </label> {{model.description}}</p>
@@ -81,8 +81,19 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th> Id </th>
-                <th> Name </th>
+                <td>{{contrib.id}}</td>
+                <td> {{if contrib.unregisteredContributor contrib.unregisteredContributor contrib.users.fullName}} </td>
+                <td>
+                    <select onchange={{action "permissionChange" value="target.value" bubbles=true}}>
+                        <option value="read {{contrib.id}}" selected={{selectedHelper contrib.permission "read"}}> Read </option>
+                        <option value="write {{contrib.id}}" selected={{selectedHelper contrib.permission "write"}}>  Read + Write </option>
+                        <option value="admin {{contrib.id}}" selected={{selectedHelper contrib.permission "admin"}}>  Administrator </option>
+                    </select>
+                </td>
+                <td>
+                    <input onchange={{action "bibliographicChange" value="target"}} checked={{bibliographicHelper contrib.bibliographic}} type="checkbox" name="bibliographic" value="{{contrib.id}}">
+                </td>
+                <td> <button {{action "deleteContributor" contrib}} class="btn btn-danger"> Remove </button> </td>
             </tr>
         </thead>
         {{#each model.children as |child|}}
